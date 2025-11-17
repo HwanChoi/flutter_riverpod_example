@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      riverpod_generator:riverpod_generator:
+        options:
+          # Options for all Riverpod generators
+          # For example, you can disable the generation of .freezed files
+          # when using Freezed with Riverpod.
+          # generate_freezed_helpers: false

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@superclaude-org/superagent": "^0.1.6"
+  }
+}
