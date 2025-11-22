@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+## 주요 사항
+모든 코딩 과정은 한글로 설명 해줘
+중요 부분의 주석은 한글로 비교적 자세히 설명 생성
+

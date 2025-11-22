@@ -34,15 +34,18 @@ class ApiService {
 
   /// 게시글 목록을 비동기적으로 가져옵니다.
   Future<List<Post>> getPosts() async {
+    print('API: getPosts() 호출됨');
     print('API: 실제 네트워크에서 게시글 데이터를 요청합니다...');
     try {
       final response = await http.get(Uri.parse('$_baseUrl/posts'));
+      print('API: 응답 수신. Status Code: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         // 성공적으로 데이터를 받아왔을 경우
+        print('API: 응답 본문: ${response.body.substring(0, 100)}...'); // 응답 본문 일부만 출력
         final List<dynamic> jsonData = jsonDecode(response.body);
         final posts = jsonData.map((json) => Post.fromJson(json)).toList();
-        print('API: 성공적으로 데이터를 파싱하고 반환합니다.');
+        print('API: 성공적으로 데이터를 파싱하고 ${posts.length}개의 게시글을 반환합니다.');
         return posts;
       } else {
         // 서버에서 에러 응답을 보냈을 경우
@@ -62,11 +65,13 @@ class ApiService {
 
 /// `ApiService`의 인스턴스를 제공하는 Provider입니다.
 final apiServiceProvider = Provider<ApiService>((ref) {
+  print('Provider: apiServiceProvider 생성됨');
   return ApiService();
 });
 
 /// `FutureProvider`를 사용하여 실제 API로부터 게시글 데이터를 가져옵니다.
 final postsProvider = FutureProvider<List<Post>>((ref) {
+  print('Provider: postsProvider가 데이터를 다시 가져옵니다.');
   final apiService = ref.watch(apiServiceProvider);
   return apiService.getPosts();
 });
@@ -80,7 +85,9 @@ class ApiCallExamplePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('UI: ApiCallExamplePage 빌드됨');
     final asyncPosts = ref.watch(postsProvider);
+    print('UI: 현재 asyncPosts 상태: $asyncPosts');
 
     return Scaffold(
       appBar: AppBar(
@@ -89,6 +96,7 @@ class ApiCallExamplePage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
+              print('UI: 새로고침 버튼 눌림');
               ref.refresh(postsProvider);
             },
           ),
