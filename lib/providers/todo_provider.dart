@@ -27,7 +27,7 @@ class BoardNotifier extends FamilyAsyncNotifier<Board?, int> {
     final apiService = ref.read(apiServiceProvider);
 
     // Optimistic update
-    final oldState = state;
+
     state = await AsyncValue.guard(() async {
       final oldBoard = state.value;
       if (oldBoard == null) return null;

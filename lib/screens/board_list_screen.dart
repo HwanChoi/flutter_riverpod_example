@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/board_provider.dart';
 import '../providers/auth_provider.dart';
-import '../api/api_service.dart';
+
 import '../models/board.dart';
-import 'todo_list_screen.dart'; // Import TodoListScreen
+
 
 class BoardListScreen extends ConsumerWidget {
   const BoardListScreen({Key? key}) : super(key: key);
@@ -31,9 +31,11 @@ class BoardListScreen extends ConsumerWidget {
                 if (titleController.text.isNotEmpty) {
                   try {
                     await ref.read(apiServiceProvider).createBoard(titleController.text);
+                    if (!context.mounted) return; // Add this check
                     ref.invalidate(boardListProvider); // Refresh the board list
                     Navigator.of(context).pop();
                   } catch (e) {
+                    if (!context.mounted) return; // Add this check
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Failed to create board: $e')),
                     );
@@ -72,9 +74,11 @@ class BoardListScreen extends ConsumerWidget {
                       if (titleController.text.isNotEmpty && titleController.text != board.title) {
                         try {
                           await ref.read(apiServiceProvider).updateBoard(board.id, titleController.text);
+                          if (!context.mounted) return; // Add this check
                           ref.invalidate(boardListProvider); // Refresh the board list
                           Navigator.of(context).pop();
                         } catch (e) {
+                          if (!context.mounted) return; // Add this check
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Failed to update board: $e')),
                           );
@@ -85,13 +89,14 @@ class BoardListScreen extends ConsumerWidget {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      try {
-                        await ref.read(apiServiceProvider).deleteBoard(board.id);
-                        ref.invalidate(boardListProvider); // Refresh the board list
-                        Navigator.of(context).pop();
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to delete board: $e')),
+                                              try {
+                                                await ref.read(apiServiceProvider).deleteBoard(board.id);
+                                                if (!context.mounted) return; // Add this check
+                                                ref.invalidate(boardListProvider); // Refresh the board list
+                                                Navigator.of(context).pop();
+                                              } catch (e) {
+                                                if (!context.mounted) return; // Add this check
+                                                ScaffoldMessenger.of(context).showSnackBar(                          SnackBar(content: Text('Failed to delete board: $e')),
                         );
                       }
                     },

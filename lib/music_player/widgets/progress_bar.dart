@@ -28,7 +28,7 @@ class ProgressBar extends ConsumerWidget {
             activeTrackColor: Colors.white,
             inactiveTrackColor: Colors.grey.shade700,
             thumbColor: Colors.white,
-            overlayColor: Colors.white.withOpacity(0.2),
+            overlayColor: Colors.white.withAlpha((255 * 0.2).round()),
           ),
           child: Slider(
             min: 0.0,

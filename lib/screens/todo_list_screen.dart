@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/todo_provider.dart';
-import '../api/api_service.dart';
+
 import '../models/todo_item.dart';
 import '../providers/auth_provider.dart'; // Import apiServiceProvider
 
@@ -64,9 +64,11 @@ class TodoListScreen extends ConsumerWidget {
                 if (descriptionController.text.isNotEmpty && descriptionController.text != todo.description) {
                   try {
                     await ref.read(apiServiceProvider).updateTodoItem(boardId, todo.id, description: descriptionController.text);
+                    if (!context.mounted) return; // Add this check
                     ref.invalidate(boardProvider(boardId)); // Refresh the board details
                     Navigator.of(context).pop();
                   } catch (e) {
+                    if (!context.mounted) return; // Add this check
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Failed to update todo: $e')),
                     );
